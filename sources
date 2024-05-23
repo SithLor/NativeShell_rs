@@ -5,19 +5,22 @@ UMTYPE=nt
 MINWIN_SDK_LIB_PATH=$(SDK_LIB_PATH)
 INCLUDES=$(DDK_INC_PATH);./ndk
 
-SOURCES=display.c  \
-        file.c     \
-        hardware.c \
-        input.c    \
-        main.c     \
-        sysinfo.c  \
-    keytrans.c \
-    shell.c    \
-    process.c  \
-    ntfile.c   \
-    ntreg.c
+SRC_DIR = ./src
 
-PRECOMPILED_INCLUDE=precomp.h
+SOURCES=$(SRC_DIR)/display.c  \
+        $(SRC_DIR)/file.c     \
+        $(SRC_DIR)/hardware.c \
+        $(SRC_DIR)/input.c    \
+        $(SRC_DIR)/main.c     \
+        $(SRC_DIR)/sysinfo.c  \
+        $(SRC_DIR)/keytrans.c \
+        $(SRC_DIR)/shell.c    \
+        $(SRC_DIR)/process.c  \
+        $(SRC_DIR)/ntfile.c   \
+        $(SRC_DIR)/ntreg.c
+
+
+PRECOMPILED_INCLUDE=$(SRC_DIR)/precomp.h
 
 TARGETLIBS= \
 $(DDK_LIB_PATH)\ntdll.lib \

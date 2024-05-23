@@ -27,3 +27,18 @@ Use add.reg from `install` directory.
 Use remove.reg from `install` directory.
 
 Delete %systemroot%\system32\native.exe
+
+
+# to build some the dep 
+linux
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt update
+sudo apt upgrade 
+cargo install --force cbindgen
+
+
+
+
+https://docs.rust-embedded.org/book/interoperability/rust-with-c.html
+
+https://github.com/mozilla/cbindgen
