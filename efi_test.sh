@@ -23,7 +23,6 @@ cp /usr/share/OVMF/OVMF_VARS.fd ./efi_test/OVMF_VARS.fd
 
 cd efi_test
 #-enable-kvm \
-qemu-system-x86_64  -drive if=pflash,format=raw,readonly=on,file=OVMF_CODE.fd \
+qemu-system-x86_64 -nographic -drive if=pflash,format=raw,readonly=on,file=OVMF_CODE.fd \
     -drive if=pflash,format=raw,readonly=on,file=OVMF_VARS.fd \
-    -drive format=raw,file=fat:rw:esp \
-    -nographic
+    -drive format=raw,file=fat:rw:esp 
