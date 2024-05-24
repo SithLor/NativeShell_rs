@@ -118,22 +118,32 @@ fn ascii_char_to_single_str(i:u16) -> &'static str{
     }
     return final_data;    
 }
+//usage 
+//let mut final_data: &mut [&str; 20] = &mut ["";20];
+//let final_str:&str = copy_str_array_to_str!(final_data);
 macro_rules! copy_str_array_to_str {
-    ($arr:expr, $sep:expr) => {{
-        let mut arr_out = [""; 20];
+    ($arr:expr) => {
+        let mut arr_out = [""; $arr.len()];
         for i in 0..$arr.len() {
             arr_out[i] = $arr[i];
         }
         //let final_str:&str = arr_out[0..$arr.len()].join($sep);
-        let final_data: &str = arr_out.join($sep).as_str();
-        final_str
-    }};
+        let final_data: &str = arr_out.join("").as_str();
+        return final_str;
+    };
 }
-
-macro_rules! u16_slice_with_nul_to_str_arry {
-    ($u16_slice_wth_nul:expr,$target_arr:expr,$target_arr_len:expr,) => {{
-
-    }};
+//usage
+//let mut final_data: &mut [&str; 20] = &mut ["";20]; 
+//u16_slice_with_nul_to_str_arr!(firmware_vendor.to_u16_slice_with_nul(), final_data, ascii_char_to_single_str);
+macro_rules! u16_slice_with_nul_to_str_arr {
+    ($u16_slice_wth_nul_arr:expr,
+     $target_arr:expr,
+     $func_tranfer:expr) => {
+        for i in 0..$u16_slice_wth_nul.len(); {
+            let mut data: u16 = u16_slice_wth_nul_arr.to_u16_slice_with_nul()[i];
+            $target_arr[i] = $func_tranfer(data);
+        }
+    };
 }
 
 fn util_shutdown(system_table: &SystemTable<Boot>) {
@@ -142,52 +152,47 @@ fn util_shutdown(system_table: &SystemTable<Boot>) {
         .reset(ResetType::SHUTDOWN, Status::SUCCESS, None);
 }
 fn get_firmware_vendor(system_table: &SystemTable<Boot>) -> &str {
+    let t = info!("Firmware Vendor: {}", system_table.firmware_vendor());
     //clone the firmware vendor CString16 so rust can drop the value after the function is done
-    let _firmware_vendor: CString16 = CString16::from(system_table.firmware_vendor()).clone();
+
+    //let _firmware_vendor: CString16 = CString16::from(system_table.firmware_vendor()).clone();
+    
     //check if the firmware vendor is empty
-    if _firmware_vendor.is_empty(){return "Unknown";}
+    //if _firmware_vendor.is_empty(){return "Unknown";}
     //check if the firmware vendor is ascii
-    if _firmware_vendor.is_ascii(){
-        //this hellish code
-
-        //get len for the for loop
-        //create a mutable array of &str
-        //iterate over the CString16 that get convert to u16 and then 
-        //pass in the ascii_char_to_single_str func tranlaste num ascii to single str set it 
-        // final_data[] array  
-        let length = _firmware_vendor.to_u16_slice_with_nul().len();
-        let mut final_data: &mut [&str; 20] = &mut ["";20]; // Change the type to &mut [&str;20]
-        for i in 0..length {
-            let mut data: u16 = _firmware_vendor.to_u16_slice_with_nul()[i];
-
-            final_data[i] = ascii_char_to_single_str(data);
-        }
-
-        // create temp dir called __f
-        // iterate over the final_data array and set the value to __f to so i dont have to deal with the temparry value in cpu stack error
-        // join the array and convert it to a string and return it
-        let mut __f = [""; 20];
-        for i in 0..length {
-            __f[i] = final_data[i];
-        }
-        let mut final_str: &str = __f.join("").as_str();
-
-        //if i were just did this return final_data.join("").as_str(); it would have return a error
- //       error[E0515]: cannot return value referencing temporary value
-//  --> src/main.rs:159:16
-//    |
-//159 |         return final_data.join("").as_str();
-//    |                -------------------^^^^^^^^^
-//    |                |
-//    |                returns a value referencing data owned by the current function
-//    |                temporary value created here
-        return final_str;
-    } else {
-        return "Unknown";
-    }
+    //if _firmware_vendor.is_ascii(){
+    //    //this hellish code
+//
+    //    //get len for the for loop
+    //    //create a mutable array of &str
+    //    //iterate over the CString16 that get convert to u16 and then 
+    //    //pass in the ascii_char_to_single_str func tranlaste num ascii to single str set it 
+    //    // final_data[] array  
+    //    let length = _firmware_vendor.to_u16_slice_with_nul().len();
+    //    let mut final_data: &mut [&str; 20] = &mut ["";20]; // Change the type to &mut [&str;20]
+    //    for i in 0..length {
+    //        let mut data: u16 = _firmware_vendor.to_u16_slice_with_nul()[i];
+//
+    //        final_data[i] = ascii_char_to_single_str(data);
+    //    }
+    //    // create temp dir called __f
+    //    // iterate over the final_data array and set the value to __f to so i dont have to deal with the temparry value in cpu stack error
+    //    // join the array and convert it to a string and return it
+    //    let mut __f = [""; 20];
+    //    for i in 0..length {
+    //        __f[i] = final_data[i];
+    //    }
+//
+    //    let final_str: &str = __f.join("").as_str();
+//
+    //    return final_str
+    //} else {
+    //    return "Unknown";
+    //}
 
  
 }
+
 fn get_firmware_revision(system_table: &SystemTable<Boot>) -> u32{
     let firmware_revision = system_table.firmware_revision();
     return firmware_revision;
@@ -208,8 +213,10 @@ fn get_uefi_revision(system_table: &SystemTable<Boot>) -> uefi::table::Revision{
 fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
     uefi::helpers::init(&mut system_table).unwrap();
 
-    info!("Firmware Vendor: {}", get_firmware_vendor(&system_table));
-
+    //info!("Firmware Vendor: {}", get_firmware_vendor(&system_table));
+    info!("Firmware Vendor: {}", system_table.firmware_vendor())
+    system_table.boot_services().stall(10_000_000);
+    system_table
     util_shutdown(&system_table);
     return Status::SUCCESS;
 }
