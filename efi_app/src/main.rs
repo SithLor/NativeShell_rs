@@ -64,6 +64,7 @@ fn create_efi_tabless(system_table: &SystemTable<Boot>) -> efi_table{
     let efi_table = system_table.config_table();
     let mut _c_voids: [*const c_void; 11] = [core::ptr::null();11];
     let mut _guids: [Guid; 11] = [ACPI_GUID;11];
+    
     for (i, table) in efi_table.iter().enumerate() {
         info!("Table {}: GUID: {:#?} _c_voids: {:#?}", i, table.guid, table.address);
         _c_voids[i] = table.address;
@@ -84,7 +85,7 @@ fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
     info!("Firmware Revision: {}", get_firmware_revision_str(&system_table));
     info!("UEFI Revision: {:?}", get_uefi_revision(&system_table));
 
-    let table = create_efi_tabless(&system_table);
+    let table: efi_table = create_efi_tabless(&system_table);
 
     //read f2fd1544-9794-4a2c-992e-e5bbcf20e394
 
