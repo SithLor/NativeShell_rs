@@ -42,3 +42,5 @@ cargo install --force cbindgen
 https://docs.rust-embedded.org/book/interoperability/rust-with-c.html
 
 https://github.com/mozilla/cbindgen
+
+git clone --recurse-submodules https://github.com/Jamesits/dropWPBT.git
