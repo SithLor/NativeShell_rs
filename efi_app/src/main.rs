@@ -84,6 +84,6 @@ fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
         }
     }
 
-    system_table.boot_services().stall(10_000_000);
+    //system_table.boot_services().stall(10_000_000);
     Status::SUCCESS
 }
