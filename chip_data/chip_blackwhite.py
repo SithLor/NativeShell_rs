@@ -21,6 +21,8 @@ def image_to_ascii(image_path, max_size=(80, 80)):
             ascii_str += ascii_chars[int(ascii_index)]
         ascii_str += '\n'
     return ascii_str
+
+
 def main():
     images_path = "./frames/"
     # load images from path file are called 0001 to 0008
@@ -28,6 +30,6 @@ def main():
         ascii = image_to_ascii(images_path + "000" + str(i) + ".png")
         # print ascii with colored background
         print('\033[48;5;0m' + ascii + '\033[0m')  # ANSI escape code to print with colored background
-        with open('ascii_art.rs', 'a') as f:
-            f.write(f"const ASCII_ART_{i}: &str = r##\"{ascii}\"##;\n")
+        with open('chip_black_and_white.rs', 'a') as f:
+            f.write(f"pub const ASCII_ART_{i}: &str = r##\"{ascii}\"##;\n")
 main()

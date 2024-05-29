@@ -61,18 +61,7 @@ fn load_image(file:&str){
 fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
     uefi::helpers::init(&mut system_table).unwrap();
 
-    info!("Firmware Vendor: {}", system_table.firmware_vendor());
-    info!("Firmware Revision String: {}", get_firmware_revision(&system_table));
-    info!("Firmware Revision: {}", get_firmware_revision_str(&system_table));
-    info!("UEFI Revision: {:?}", get_uefi_revision(&system_table));
-
-    let bs: &BootServices = system_table.boot_services();
-
-    let gop_guid = uefi::proto::console::gop::GraphicsOutput::GUID;
-    let mut handles = [MaybeUninit::<Handle>::uninit(); 1];
-    let locate_handle_result = bs.locate_handle(SearchType::ByProtocol(&gop_guid), Some(&mut handles));
-    
-    //ping google https serice 
+    //print to the console 
     
 
 
