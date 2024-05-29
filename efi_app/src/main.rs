@@ -70,31 +70,30 @@ fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
 
     let gop_guid = uefi::proto::console::gop::GraphicsOutput::GUID;
     let mut handles = [MaybeUninit::<Handle>::uninit(); 1];
-    match bs.locate_handle(SearchType::ByProtocol(&gop_guid), Some(&mut handles)) {
-        Ok(num_handles) => {
-            if num_handles > 0 {
-                let handle: Handle = unsafe { handles[0].assume_init() };
-                let params: OpenProtocolParams = OpenProtocolParams {
-                    handle,
-                    agent: _handle, // _handle is the handle of the application
-                    controller: None,
-                };
-                match unsafe { bs.open_protocol::<GraphicsOutput>(params, OpenProtocolAttributes::Exclusive) } {
-                    Ok(gop) => {
-                        // Use gop here
-                    },
-                    Err(_) => {
-                        info!("Unable to locate GOP");
-                    }
-                };
-            } else  {
-                info!("No GOP handles found");
-            }
-        },
-        Err(_) => {
-            info!("Unable to locate handles");
+    let locate_handle_result = bs.locate_handle(SearchType::ByProtocol(&gop_guid), Some(&mut handles));
+    
+    if let Ok(num_handles) = locate_handle_result {
+        if num_handles > 0 {
+            let handle: Handle = unsafe { handles[0].assume_init() };
+            let params: OpenProtocolParams = OpenProtocolParams {
+                handle,
+                agent: _handle, // _handle is the handle of the application
+                controller: None,
+            };
+            let open_protocol_result = unsafe { bs.open_protocol::<GraphicsOutput>(params, OpenProtocolAttributes::Exclusive) };
+            match open_protocol_result {
+                Ok(gop) => {
+                    // Use gop here
+                },
+                Err(_) => {
+                    info!("Unable to locate GOP");
+                }
+            };
+        } else  {
+            info!("No GOP handles found");
         }
+    } else {
+        info!("Unable to locate handles");
     }
-
     Status::SUCCESS
 }
