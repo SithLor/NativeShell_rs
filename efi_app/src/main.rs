@@ -8,9 +8,6 @@ use core::ffi::c_void;
 use core::mem::MaybeUninit;
 
 use log::info;
-use uefi::proto::console::gop::GraphicsOutput;
-use uefi::table::boot::{OpenProtocolParams, SearchType};
-use uefi::table::cfg::ACPI_GUID;
 use uefi::{
     helpers::system_table,
     prelude::*,
