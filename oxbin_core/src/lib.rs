@@ -3,31 +3,20 @@
 //api:SperateProcessOnCall(arg) -> arg semi_isolated whick use ipc to communicate with the main process to return, and fully_isolated which use file to store the result and read it from the main process
 
 
-//detect cheateninge by checking the Score of the player scale value with older value 
 
-struct Player {
-    current_score: u32,
-    previous_score: u32,
-    cheat_threshold: u32,
-}
+const HIGH: u8 = 1;
+const LOW: u8 = 0;
+//impl shit serial protocall with 
 
-impl Player {
-    fn new(cheat_threshold: u32) -> Self {
-        Player {
-            current_score: 0,
-            previous_score: 0,
-            cheat_threshold,
-        }
-    }
-
-    fn update_score(&mut self, new_score: u32) {
-        self.previous_score = self.current_score;
-        self.current_score = new_score;
-    }
-
-    fn is_cheating(&self) -> bool {
-        self.current_score < self.previous_score || self.current_score > self.previous_score + self.cheat_threshold
-    }
+//pin
+//pin_0:grond 
+//pin_1:data+
+//pin_2:data- 
+struct PinData {
+    pin_1:u8,
+    pin_2:u8,
+    pin_3:u8,
+    pin_4:u8
 }
 
 #[cfg(test)]
