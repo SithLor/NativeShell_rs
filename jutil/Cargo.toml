@@ -1,5 +1,5 @@
 [package]
-name = "oxbin_core"
+name = "jutil"
 version = "0.1.0"
 edition = "2021"
 
