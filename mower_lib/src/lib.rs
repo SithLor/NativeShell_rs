@@ -1,4 +1,9 @@
-
+//marco to get size of &str
+macro_rules! size_of_str {
+    ($s:expr) => {
+        $s.len()
+    };
+}
 
 #[cfg(test)]
 mod tests {
