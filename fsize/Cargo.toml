@@ -1,6 +1,7 @@
 [package]
-name = "mower_lib"
+name = "fsize"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+blib = {path = "./blib"}
